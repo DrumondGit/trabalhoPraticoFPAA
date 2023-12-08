@@ -5,14 +5,12 @@ import java.util.List;
 public class DistribuicaoRotas {
     private int numCaminhoes;
     private int[] rotas;
-    private int[] caminhoes;
     private List<List<Integer>> melhorRotasPorCaminhao;
     private int minDiferenca = Integer.MAX_VALUE;
 
     public DistribuicaoRotas(int numCaminhoes, int[] rotas) {
         this.numCaminhoes = numCaminhoes;
         this.rotas = rotas;
-        this.caminhoes = new int[numCaminhoes];
     }
 
     public void distribuirRotas() {
@@ -25,6 +23,13 @@ public class DistribuicaoRotas {
 
     private void distribuirRotas(int rotaAtual, List<List<Integer>> rotasPorCaminhao) {
         if (rotaAtual == rotas.length) {
+            int[] caminhoes = new int[numCaminhoes];
+            for (int i = 0; i < numCaminhoes; i++) {
+                for (int rota : rotasPorCaminhao.get(i)) {
+                    caminhoes[i] += rota;
+                }
+            }
+
             int max = Arrays.stream(caminhoes).max().getAsInt();
             int min = Arrays.stream(caminhoes).min().getAsInt();
             int diferenca = max - min;
@@ -37,12 +42,17 @@ public class DistribuicaoRotas {
             }
         } else {
             for (int i = 0; i < numCaminhoes; i++) {
-                caminhoes[i] += rotas[rotaAtual];
                 rotasPorCaminhao.get(i).add(rotas[rotaAtual]);
-                if (caminhoes[i] - rotas[rotaAtual] + rotas[rotaAtual] <= minDiferenca) {
+
+                int total = 0;
+                for (int rota : rotasPorCaminhao.get(i)) {
+                    total += rota;
+                }
+
+                if (total - Arrays.stream(rotas).sum() / numCaminhoes <= minDiferenca) {
                     distribuirRotas(rotaAtual + 1, rotasPorCaminhao);
                 }
-                caminhoes[i] -= rotas[rotaAtual];
+
                 rotasPorCaminhao.get(i).remove(rotasPorCaminhao.get(i).size() - 1);
             }
         }
