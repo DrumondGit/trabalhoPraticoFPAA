@@ -1,18 +1,24 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class app {
     public static void main(String[] args) {
         /*int[] tamanhosConjunto = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        EstrategiaGulosa.testarEstrategias(tamanhosConjunto);
-        divisaoConquista();*/
-        backtracking();
+        EstrategiaGulosa.testarEstrategias(tamanhosConjunto);*/
+        divisaoConquista();
+        //backtracking();
     }
 
     public static void divisaoConquista() {
         int[] rotas = {35, 34, 33, 23, 21, 32, 35, 19, 26, 42};
         int numCaminhoes = 3;
-        DivisaoConquista distribuicao = new DivisaoConquista(rotas, numCaminhoes);
-        System.out.println("A distribuição mínima é: " + distribuicao.calcularDistribuicaoMinima());
+        int[][] distribuicao = DivisaoConquista.dividirEResolver(rotas, numCaminhoes);
+
+        // Imprimir a distribuição e o total de cada rota
+        for (int i = 0; i < numCaminhoes; i++) {
+            int totalCaminhao = Arrays.stream(distribuicao[i]).sum();
+            System.out.println("Caminhão " + (i + 1) + ": " + Arrays.toString(distribuicao[i]) + " - Total: " + totalCaminhao);
+        }
     }
 
     public static void backtracking() {
