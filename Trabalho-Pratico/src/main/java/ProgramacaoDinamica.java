@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.List;
 
 public class ProgramacaoDinamica {
     static int INF = Integer.MAX_VALUE;
@@ -7,19 +6,30 @@ public class ProgramacaoDinamica {
     static int[] teste3;
     static int[][] teste2;
 
-    public static void inicio(String[] args) {
+    public static void main(String[] args) {
+        int[] rotas = { 40,36,38,29,32,28,31,35,31,30,32,30,29,39,35,38,39,35,32,38,32,33,29,33,29,39,28};
         int N = 3;
         
-        List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(30, 10, 0.5);
-        for (int[] rotas : conjuntoDeTeste) {
-            for(int i = 0; i < rotas.length; i++){
+        // List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(30, 10, 0.5);
+        // for (int[] rotas : conjuntoDeTeste) {
+        //     for(int i = 0; i < rotas.length; i++){
 
-                System.out.print(rotas[i] + " ");
+        //         System.out.print(rotas[i] + " ");
                 
-            }
-            System.out.println();
-            pd(rotas, N);
-        }
+        //     }
+        //     System.out.println();
+            
+        // }
+        long startTime = System.currentTimeMillis();
+
+        pd(rotas, N);
+        
+        long endTime = System.currentTimeMillis();
+        
+        long tempoExecucao = endTime - startTime;
+        
+        System.out.println("Tempo de execução: " + tempoExecucao + " milissegundos");
+        
     }
 
     public static void pd(int[] rotas, int N) {
