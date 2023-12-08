@@ -1,44 +1,51 @@
 import java.util.Arrays;
 
 public class DivisaoConquista {
-    private int[] rotas;
-    private int numCaminhoes;
 
-    public DivisaoConquista(int[] rotas, int numCaminhoes) {
-        this.rotas = rotas;
-        this.numCaminhoes = numCaminhoes;
+    public static int[][] dividirEResolver(int[] rotas, int N) {
+        Arrays.sort(rotas);
+        int[][] distribuicao = new int[N][rotas.length / N + 1]; // +1 para garantir espaço extra
+        distribuirRotas(rotas, 0, rotas.length - 1, distribuicao, N);
+        return distribuicao;
     }
 
-    public int calcularDistribuicaoMinima() {
-        int max = Arrays.stream(rotas).max().getAsInt();
-        int sum = Arrays.stream(rotas).sum();
+    private static void distribuirRotas(int[] rotas, int inicio, int fim, int[][] distribuicao, int N) {
+        if (inicio <= fim) {
+            int meio = (inicio + fim) / 2;
+            int caminhaoMenorKmIndex = encontrarCaminhaoMenorKm(distribuicao);
+            int indiceVazio = encontrarIndiceVazio(distribuicao[caminhaoMenorKmIndex]);
 
-        while (max < sum) {
-            int mid = max + (sum - max) / 2;
-            if (verificarPossibilidade(mid)) {
-                sum = mid;
-            } else {
-                max = mid + 1;
+            if (indiceVazio != -1) {
+                distribuicao[caminhaoMenorKmIndex][indiceVazio] = rotas[meio];
+                distribuirRotas(rotas, inicio, meio - 1, distribuicao, N);
+                distribuirRotas(rotas, meio + 1, fim, distribuicao, N);
             }
         }
-        return sum;
     }
 
-    private boolean verificarPossibilidade(int mid) {
-        int caminhoesNecessarios = 1;
-        int somaAtual = 0;
+    private static int encontrarCaminhaoMenorKm(int[][] distribuicao) {
+        int indexMenorKm = 0;
+        int menorKm = Integer.MAX_VALUE;
 
-        for (int i = 0; i < rotas.length; i++) {
-            if (somaAtual + rotas[i] > mid) {
-                caminhoesNecessarios++;
-                somaAtual = rotas[i];
-                if (caminhoesNecessarios > numCaminhoes) {
-                    return false;
-                }
-            } else {
-                somaAtual += rotas[i];
+        for (int i = 0; i < distribuicao.length; i++) {
+            int kmTotal = Arrays.stream(distribuicao[i]).sum();
+            if (kmTotal < menorKm) {
+                menorKm = kmTotal;
+                indexMenorKm = i;
             }
         }
-        return true;
+
+        return indexMenorKm;
     }
+
+    private static int encontrarIndiceVazio(int[] caminhao) {
+        for (int i = 0; i < caminhao.length; i++) {
+            if (caminhao[i] == 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
 }
