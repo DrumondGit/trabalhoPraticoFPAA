@@ -60,5 +60,9 @@ public class app {
         }
         
     }
+
+    public static void programacaoDinamica(){
+        ProgramacaoDinamica.inico();
+    }
 }
 

@@ -7,7 +7,7 @@ public class ProgramacaoDinamica {
     static int[] distancias;
     static int[][] rotasSolucao;
 
-    public static void main(String[] args) {
+    public static void inico() {
         // int[] rotas = {35, 34, 33, 23, 21, 32, 35, 19, 26, 42};
         int N = 3;
         double tempoTotal = 0.0;
@@ -55,24 +55,24 @@ public class ProgramacaoDinamica {
         System.out.println("A quilometragem de cada caminhão é: " + Arrays.toString(caminhoes));
     }
 
-    static int solve(int trucks, int nRotas) {
-        if (trucks == 1) {
+    static int solve(int caminhoes, int nRotas) {
+        if (caminhoes == 1) {
             return distancias[nRotas];
         }
         if (nRotas == 0) {
             return 0;
         }
-        if (resultadosInter[trucks][nRotas] != 0) {
-            return resultadosInter[trucks][nRotas];
+        if (resultadosInter[caminhoes][nRotas] != 0) {
+            return resultadosInter[caminhoes][nRotas];
         }
         int ans = INF;
         for (int i = 0; i < nRotas; i++) {
-            int temp = Math.max(solve(trucks - 1, i), distancias[nRotas] - distancias[i]);
+            int temp = Math.max(solve(caminhoes - 1, i), distancias[nRotas] - distancias[i]);
             if (temp < ans) {
                 ans = temp;
-                rotasSolucao[trucks][nRotas] = i;
+                rotasSolucao[caminhoes][nRotas] = i;
             }
         }
-        return resultadosInter[trucks][nRotas] = ans;
+        return resultadosInter[caminhoes][nRotas] = ans;
     }
 }
