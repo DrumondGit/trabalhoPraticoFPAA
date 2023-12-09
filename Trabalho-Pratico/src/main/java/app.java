@@ -33,7 +33,7 @@ public class app {
             // Para cada conjunto de rotas, distribui as rotas entre os caminhões e imprime a menor diferença de quilometragem
             for (int[] rotas : conjuntosDeRotas) {
                 long startTime = System.nanoTime();
-                DistribuicaoRotas distribuicao = new DistribuicaoRotas(3, rotas);
+                Backtracking distribuicao = new Backtracking(3, rotas);
                 distribuicao.distribuirRotas();
                 long endTime = System.nanoTime();
                 long duration = (endTime - startTime);

@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DistribuicaoRotas {
+public class Backtracking {
     private int numCaminhoes;
     private int[] rotas;
     private List<List<Integer>> melhorRotasPorCaminhao;
     private int minDiferenca = Integer.MAX_VALUE;
 
-    public DistribuicaoRotas(int numCaminhoes, int[] rotas) {
+    public Backtracking(int numCaminhoes, int[] rotas) {
         this.numCaminhoes = numCaminhoes;
         this.rotas = rotas;
     }
