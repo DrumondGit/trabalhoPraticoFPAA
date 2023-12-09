@@ -3,8 +3,10 @@ import java.util.List;
 
 public class app {
     public static void main(String[] args) {
-        /*int[] tamanhosConjunto = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        EstrategiaGulosa.testarEstrategias(tamanhosConjunto);*/
+         int[] tamanhosConjunto = {40,36,38,29,32,28,31,35,31,30,32,30,29,39,35,38,39,35,32,38,32,33,29,33,29,39,28};
+        EstrategiaGulosa.testarEstrategias(tamanhosConjunto);
+        EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
+        
         divisaoConquista();
         //backtracking();
     }
