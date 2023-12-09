@@ -15,16 +15,28 @@ public class app {
     public static void divisaoConquista() {
         int numRotas = 19;
         int numCaminhoes = 3;
-        List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, 10, 0.5);
-        for (int i = 0; i < 10; i++) {
-            int[][] distribuicao = DivisaoConquista.dividirEResolver(conjuntosDeRotas.get(i), numCaminhoes);
+        long totalDuration = 0;
+        int tamConjunto = 10;
 
-            // Imprimir a distribuição e o total de cada rota
+        List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, tamConjunto, 0.5);
+        
+
+        for (int i = 0; i < tamConjunto; i++) {
+            long startTime = System.nanoTime();
+            int[][] distribuicao = DivisaoConquista.dividirEResolver(conjuntosDeRotas.get(i), numCaminhoes);
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            totalDuration += duration;
+            
+            
             for (int j = 0; j < numCaminhoes; j++) {
                 int totalCaminhao = Arrays.stream(distribuicao[j]).sum();
                 System.out.println(
                         "Caminhão " + (j + 1) + ": " + Arrays.toString(distribuicao[j]) + " - Total: " + totalCaminhao);
             }
+
+            System.out.println("Número de rotas: " + numRotas);
+            System.out.println("Duração: " + duration);
         }
 
     }
