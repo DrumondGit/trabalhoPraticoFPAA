@@ -3,10 +3,21 @@ import java.util.List;
 
 public class app {
     public static void main(String[] args) {
-        // int[] tamanhosConjunto = { 40, 36, 38, 29, 32, 28, 31, 35, 31, 30, 32, 30, 29, 39, 35, 38, 39, 35, 32, 38, 32,
-        //         33, 29, 33, 29, 39, 28 };
-        // EstrategiaGulosa.testarEstrategias(tamanhosConjunto);
-        // EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
+        int[] Conjunto_rotas1 = {40, 36, 38, 29, 32, 28, 31, 35, 31, 30, 32, 30, 29, 39, 35, 38, 39, 35, 32, 38, 32, 33, 29, 33, 29, 39, 28};
+        int[] Conjunto_rotas2 = {32, 51, 32, 43, 42, 30, 42, 51, 43, 51, 29, 25, 27, 32, 29, 55, 43, 29, 32, 44, 55, 29, 53, 30, 24, 27};
+        EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
+
+       // System.out.println("\nConjunto de rotas 1:");
+       // System.out.println("\n Estratégia Gulosa 1 ");
+       // EstrategiaGulosa.distribuirRotas(Conjunto_rotas1, 3, "EG1");
+       // System.out.println("\n Estratégia Gulosa 2 ");
+       // EstrategiaGulosa.distribuirRotas(Conjunto_rotas1, 3, "EG2");
+
+       // System.out.println("\nConjunto de rotas 2:");
+       // System.out.println("\n Estratégia Gulosa 1 ");
+       // EstrategiaGulosa.distribuirRotas(Conjunto_rotas2, 3, "EG1");
+       // System.out.println("\n Estratégia Gulosa 2 ");
+       // EstrategiaGulosa.distribuirRotas(Conjunto_rotas2, 3, "EG2");
 
         divisaoConquista();
         // backtracking();
