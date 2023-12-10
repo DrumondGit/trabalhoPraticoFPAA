@@ -25,7 +25,7 @@ public class EstrategiaGulosa {
             int []  quilometragens;
 
             for (int teste = 0; teste < numTestes; teste++) {
-                List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(tamanhoConjunto / 2, tamanhoConjunto, 1.0);
+                List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(tamanhoConjunto / 2, tamanhoConjunto, 0.5);
 
 
                 System.out.println("\nEstratégia Gulosa 1:");
