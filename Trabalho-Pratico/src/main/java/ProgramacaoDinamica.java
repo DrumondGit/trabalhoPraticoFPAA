@@ -53,7 +53,7 @@ public class ProgramacaoDinamica {
             }
         }
     
-        solve(N, rotas.length);
+        calc(N, rotas.length);
     
         int[] caminhoes = new int[N];
         int nRotas = rotas.length;
@@ -64,7 +64,7 @@ public class ProgramacaoDinamica {
         System.out.println("A quilometragem de cada caminhão é: " + Arrays.toString(caminhoes));
     }
     
-    static int solve(int caminhoes, int nRotas) {
+    static int calc(int caminhoes, int nRotas) {
         if (resultadosInter[caminhoes][nRotas] != -1) {
             return resultadosInter[caminhoes][nRotas];
         }
@@ -79,7 +79,7 @@ public class ProgramacaoDinamica {
     
         int ans = INF;
         for (int i = 1; i < nRotas; i++) {
-            int temp = Math.max(solve(caminhoes - 1, i), distancias[nRotas] - distancias[i]);
+            int temp = Math.max(calc(caminhoes - 1, i), distancias[nRotas] - distancias[i]);
             if (temp < ans) {
                 ans = temp;
                 rotasSolucao[caminhoes][nRotas] = i;
