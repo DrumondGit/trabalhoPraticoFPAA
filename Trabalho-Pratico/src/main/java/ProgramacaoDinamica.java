@@ -15,11 +15,11 @@ public class ProgramacaoDinamica {
         List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(qtdRotas, 10, 0.5);
         for (int j = 0; j < 10; j++) {
             for (int[] rotas : conjuntoDeTeste) {
-                //  for (int i = 0; i < rotas.length; i++) {
+                //   for (int i = 0; i < rotas.length; i++) {
 
-                //      System.out.print(rotas[i] + " ");
+                //       System.out.print(rotas[i] + " ");
 
-                //  }
+                //   }
                 System.out.println();
                 long startTime = System.currentTimeMillis();
                 pd(rotas, N);
@@ -30,9 +30,11 @@ public class ProgramacaoDinamica {
                 tempoTotal += tempoExecucao;
 
             }
+            
             System.out.println("Média do tempo de execução do conjunto de " + qtdRotas + ": " + tempoTotal/10);
             qtdRotas += 19;
             conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(qtdRotas, 10, 0.5);
+            tempoTotal = 0;
         }
     }
 
@@ -44,8 +46,15 @@ public class ProgramacaoDinamica {
         }
         resultadosInter = new int[N + 1][rotas.length + 1];
         rotasSolucao = new int[N + 1][rotas.length + 1];
+    
+        for (int caminhoes = 1; caminhoes <= N; caminhoes++) {
+            for (int nRotas = 1; nRotas <= rotas.length; nRotas++) {
+                resultadosInter[caminhoes][nRotas] = -1;
+            }
+        }
+    
         solve(N, rotas.length);
-
+    
         int[] caminhoes = new int[N];
         int nRotas = rotas.length;
         for (int i = N; i > 0; i--) {
@@ -54,25 +63,33 @@ public class ProgramacaoDinamica {
         }
         System.out.println("A quilometragem de cada caminhão é: " + Arrays.toString(caminhoes));
     }
-
+    
     static int solve(int caminhoes, int nRotas) {
+        if (resultadosInter[caminhoes][nRotas] != -1) {
+            return resultadosInter[caminhoes][nRotas];
+        }
+    
         if (caminhoes == 1) {
             return distancias[nRotas];
         }
+    
         if (nRotas == 0) {
             return 0;
         }
-        if (resultadosInter[caminhoes][nRotas] != 0) {
-            return resultadosInter[caminhoes][nRotas];
-        }
+    
         int ans = INF;
-        for (int i = 0; i < nRotas; i++) {
+        for (int i = 1; i < nRotas; i++) {
             int temp = Math.max(solve(caminhoes - 1, i), distancias[nRotas] - distancias[i]);
             if (temp < ans) {
                 ans = temp;
                 rotasSolucao[caminhoes][nRotas] = i;
             }
         }
-        return resultadosInter[caminhoes][nRotas] = ans;
+    
+        resultadosInter[caminhoes][nRotas] = ans;
+        return ans;
     }
+    
+    
+    
 }
