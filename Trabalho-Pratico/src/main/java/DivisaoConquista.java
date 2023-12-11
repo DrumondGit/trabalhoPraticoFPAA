@@ -3,7 +3,6 @@ import java.util.Arrays;
 public class DivisaoConquista {
 
     public static int[][] dividirEResolver(int[] rotas, int N) {
-        Arrays.sort(rotas);
         int[][] distribuicao = new int[N][rotas.length / N + 1]; // +1 para garantir espaço extra
         distribuirRotas(rotas, 0, rotas.length - 1, distribuicao, N);
         return distribuicao;
