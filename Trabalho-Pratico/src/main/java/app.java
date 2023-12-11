@@ -1,11 +1,13 @@
 import java.util.Arrays;
 import java.util.List;
+import java.text.DecimalFormat;
 
 public class app {
     public static void main(String[] args) {
-        int[] Conjunto_rotas1 = {40, 36, 38, 29, 32, 28, 31, 35, 31, 30, 32, 30, 29, 39, 35, 38, 39, 35, 32, 38, 32, 33, 29, 33, 29, 39, 28};
-        int[] Conjunto_rotas2 = {32, 51, 32, 43, 42, 30, 42, 51, 43, 51, 29, 25, 27, 32, 29, 55, 43, 29, 32, 44, 55, 29, 53, 30, 24, 27};
-        EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
+        
+        // int[] Conjunto_rotas1 = {40, 36, 38, 29, 32, 28, 31, 35, 31, 30, 32, 30, 29, 39, 35, 38, 39, 35, 32, 38, 32, 33, 29, 33, 29, 39, 28};
+        // int[] Conjunto_rotas2 = {32, 51, 32, 43, 42, 30, 42, 51, 43, 51, 29, 25, 27, 32, 29, 55, 43, 29, 32, 44, 55, 29, 53, 30, 24, 27};
+        // EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
 
        // System.out.println("\nConjunto de rotas 1:");
        // System.out.println("\n Estratégia Gulosa 1 ");
@@ -20,37 +22,40 @@ public class app {
        // EstrategiaGulosa.distribuirRotas(Conjunto_rotas2, 3, "EG2");
 
         divisaoConquista();
-        // backtracking();
+        //backtracking();
+        //programacaoDinamica();
     }
 
     public static void divisaoConquista() {
-        int numRotas = 19;
         int numCaminhoes = 3;
-        long totalDuration = 0;
         int tamConjunto = 10;
-
-        List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, tamConjunto, 0.5);
-        
-
-        for (int i = 0; i < tamConjunto; i++) {
-            long startTime = System.nanoTime();
-            int[][] distribuicao = DivisaoConquista.dividirEResolver(conjuntosDeRotas.get(i), numCaminhoes);
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime);
-            totalDuration += duration;
-            
-            
-            for (int j = 0; j < numCaminhoes; j++) {
-                int totalCaminhao = Arrays.stream(distribuicao[j]).sum();
-                System.out.println(
-                        "Caminhão " + (j + 1) + ": " + Arrays.toString(distribuicao[j]) + " - Total: " + totalCaminhao);
+    
+        for (int numRotas = 6; numRotas <= 20; numRotas++) {
+            List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, tamConjunto, 0.5);
+            long tempoTotal = 0;
+    
+            for (int i = 0; i < tamConjunto; i++) {
+                int[] conjuntoAtual = conjuntosDeRotas.get(i);
+    
+                long inicio = System.nanoTime();
+                int[][] distribuicao = DivisaoConquista.dividirEResolver(conjuntoAtual, numCaminhoes);
+                long fim = System.nanoTime();
+    
+                tempoTotal += (fim - inicio);
+    
+                for (int j = 0; j < numCaminhoes; j++) {
+                    int totalCaminhao = Arrays.stream(distribuicao[j]).sum();
+                    System.out.println("Caminhão " + (j + 1) + ": " + Arrays.toString(distribuicao[j]) + " - Total: " + totalCaminhao);
+                }
+                System.out.println("Número de rotas: " + numRotas);
             }
-
-            System.out.println("Número de rotas: " + numRotas);
-            System.out.println("Duração: " + duration);
+    
+            double tempoMedio = tempoTotal / (double) conjuntosDeRotas.size();
+            System.out.println("Tempo médio de execução para por conjunto " + tempoMedio + " nanossegundos");
+            System.out.println("Tempo total de 10 conjuntos: " + tempoTotal);
         }
-
     }
+    
 
     public static void backtracking() {
         int numRotas = 6;
