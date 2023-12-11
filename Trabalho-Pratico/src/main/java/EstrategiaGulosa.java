@@ -10,8 +10,8 @@ public class EstrategiaGulosa {
      * Testa as estratégias EG1 e EG2 em conjuntos de teste de diferentes tamanhos.
      *
      * Este método realiza testes para avaliar o desempenho das estratégias Gulosa 1 (EG1) e
-     * Gulosa 2 (EG2) em conjuntos de teste de diferentes tamanhos. A média da quilometragem total
-     * é calculada para cada estratégia ao longo de vários testes.
+     * Gulosa 2 (EG2) em conjuntos de teste de diferentes tamanhos. A média de tempo total
+     * para cada estratégia ao longo de vários testes.
      *
      * @param tamanhosConjunto Um array de inteiros representando os tamanhos dos conjuntos de teste.
      */
@@ -20,32 +20,41 @@ public class EstrategiaGulosa {
         int numTestes = 10;
 
         for (int tamanhoConjunto : tamanhosConjunto) {
-            double mediaEG1 = 0;
-            double mediaEG2 = 0;
+            double mediaTempoEG1 = 0;
+            double mediaTempoEG2 = 0;
             int []  quilometragens;
 
             for (int teste = 0; teste < numTestes; teste++) {
-                List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(tamanhoConjunto / 2, tamanhoConjunto, 0.5);
+                List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(tamanhoConjunto , 10, 0.5);
 
 
                 System.out.println("\nEstratégia Gulosa 1:");
+                long startTimeEG1 = System.currentTimeMillis();
                 quilometragens = conjuntoDeTeste(conjuntoDeTeste,"EG1");
-                int[][] distribuicaoEG1 = distribuirRotas(quilometragens, numCaminhoes, "EG1");
+                distribuirRotas(quilometragens, numCaminhoes, "EG1");
+                long endTimeEG1 = System.currentTimeMillis();
+                Long tempoEG1 = (endTimeEG1 - startTimeEG1) ;
+                System.out.println("Tempo EG1: " + tempoEG1 + " ms");
 
                 System.out.println("\nEstratégia Gulosa 2:");
+                long startTimeEG2 = System.currentTimeMillis();
                 quilometragens = conjuntoDeTeste(conjuntoDeTeste,"EG2");
-                int[][] distribuicaoEG2 = distribuirRotas(quilometragens, numCaminhoes, "EG2");
+                distribuirRotas(quilometragens, numCaminhoes, "EG2");
+                long endTimeEG2 = System.currentTimeMillis();
+                Long tempoEG2 = (endTimeEG2 - startTimeEG2);
+                System.out.println("Tempo EG2: " + tempoEG2 + " ms");
 
-                mediaEG1 += calcularQuilometragemTotal(distribuicaoEG1);
-                mediaEG2 += calcularQuilometragemTotal(distribuicaoEG2);
+
+                mediaTempoEG1 += tempoEG1;
+                mediaTempoEG2 += tempoEG2;
             }
 
-            mediaEG1 /= numTestes;
-            mediaEG2 /= numTestes;
+            mediaTempoEG1 /= numTestes;
+            mediaTempoEG2 /= numTestes;
 
             System.out.println("\n" + "Tamanho do Conjunto: " + tamanhoConjunto);
-            System.out.println("Média EG1: " + mediaEG1);
-            System.out.println("Média EG2: " + mediaEG2);
+            System.out.println("Média Tempo EG1: " + mediaTempoEG1 + " ms");
+            System.out.println("Média Tempo EG2: " + mediaTempoEG2 + " ms");
             System.out.println();
         }
     }
@@ -88,7 +97,7 @@ public class EstrategiaGulosa {
      * @return Uma matriz representando a distribuição das rotas entre os caminhões.
      */
     public static int[][] distribuirRotas(int[] quilometragens, int numCaminhoes, String estrategia) {
-        int[][] caminhoes = new int[numCaminhoes][quilometragens.length / 2];
+        int[][] caminhoes = new int[numCaminhoes][quilometragens.length ];
         Arrays.sort(quilometragens);
 
         if ("EG1".equals(estrategia)) {
@@ -156,23 +165,6 @@ public class EstrategiaGulosa {
 
 
     /**
-     * Calcula e retorna a quilometragem total percorrida com base na matriz de distribuição.
-     *
-     * @param distribuicao Uma matriz 2D onde cada elemento representa a quilometragem percorrida.
-     * @return A quilometragem total percorrida pelos caminhões.
-     */
-    private static double calcularQuilometragemTotal(int[][] distribuicao) {
-        double total = 0;
-        for (int i = 0; i < distribuicao.length; i++) {
-            for (int j = 0; j < distribuicao[0].length; j++) {
-                total += distribuicao[i][j];
-            }
-        }
-        return total;
-    }
-
-
-    /**
      * Gera e retorna um conjunto de números inteiros com base no valor inicial fornecido.
      *
      * @param init O valor inicial a ser usado para gerar o conjunto.
@@ -200,7 +192,7 @@ public class EstrategiaGulosa {
 
             for (int c = 0; c < caminhoes[l].length; c++) {
                 if (caminhoes[l][c] != 0) {
-                   // System.out.print(caminhoes[l][c]);
+                    //System.out.print(caminhoes[l][c]);
                     totalKm += caminhoes[l][c];
 
                     if (c < caminhoes[l].length - 1 && caminhoes[l][c + 1] != 0) {
@@ -209,7 +201,7 @@ public class EstrategiaGulosa {
                 }
             }
 
-            System.out.println("  total " + totalKm + "km");
+            System.out.println(" - total " + totalKm + "km");
         }
     }
 }
