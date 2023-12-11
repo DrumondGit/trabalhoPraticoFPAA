@@ -30,31 +30,35 @@ public class app {
         int numCaminhoes = 3;
         int tamConjunto = 10;
     
-        for (int numRotas = 6; numRotas <= 20; numRotas++) {
-            List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, tamConjunto, 0.5);
-            long tempoTotal = 0;
+       
+        for (int numRotas = 6; numRotas <= 19; numRotas++) {
+            long inicio = System.nanoTime();
     
             for (int i = 0; i < tamConjunto; i++) {
+                List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, tamConjunto, 0.5);
                 int[] conjuntoAtual = conjuntosDeRotas.get(i);
     
-                long inicio = System.nanoTime();
                 int[][] distribuicao = DivisaoConquista.dividirEResolver(conjuntoAtual, numCaminhoes);
-                long fim = System.nanoTime();
-    
-                tempoTotal += (fim - inicio);
     
                 for (int j = 0; j < numCaminhoes; j++) {
                     int totalCaminhao = Arrays.stream(distribuicao[j]).sum();
-                    System.out.println("Caminhão " + (j + 1) + ": " + Arrays.toString(distribuicao[j]) + " - Total: " + totalCaminhao);
+                    System.out.printf("Caminhão %d: %d km%n", (j + 1), totalCaminhao);
                 }
-                System.out.println("Número de rotas: " + numRotas);
+                System.out.println();
             }
     
-            double tempoMedio = tempoTotal / (double) conjuntosDeRotas.size();
-            System.out.println("Tempo médio de execução para por conjunto " + tempoMedio + " nanossegundos");
-            System.out.println("Tempo total de 10 conjuntos: " + tempoTotal);
+            long fim = System.nanoTime();
+            long tempoTotalNano = fim - inicio;
+            double tempoTotalMillis = (double) tempoTotalNano / 1e6; // Convertendo para milissegundos
+    
+            double tempoMedio = tempoTotalMillis / tamConjunto;
+            System.out.printf("Tempo médio para %d conjuntos de rotas: %.3f ms%n", tamConjunto, tempoMedio);
+            System.out.println("Número de rotas: " + numRotas);
         }
     }
+    
+    
+    
     
 
     public static void backtracking() {
