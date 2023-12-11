@@ -52,8 +52,7 @@ public class app {
             double tempoTotalMillis = (double) tempoTotalNano / 1e6; // Convertendo para milissegundos
     
             double tempoMedio = tempoTotalMillis / tamConjunto;
-            System.out.printf("Tempo médio para %d conjuntos de rotas: %.3f ms%n", tamConjunto, tempoMedio);
-            System.out.println("Número de rotas: " + numRotas);
+            System.out.printf("Número de rotas: %d;Duração média (10 testes): %.3f ms%n", numRotas,tempoMedio);
         }
     }
     
