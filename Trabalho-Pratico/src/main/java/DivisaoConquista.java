@@ -1,50 +1,51 @@
-import java.util.Arrays;
-
 public class DivisaoConquista {
 
-    public static int[][] dividirEResolver(int[] rotas, int N) {
-        int[][] distribuicao = new int[N][rotas.length / N + 1]; // +1 para garantir espaço extra
-        distribuirRotas(rotas, 0, rotas.length - 1, distribuicao, N);
+
+    public static int[] divideConquista(int[] rotas, int numCaminhoes) {
+        int[] distribuicao = new int[numCaminhoes];
+        int[] alvos = new int[numCaminhoes];
+        int somatorioRotas = calcularSomatorio(rotas);
+        for (int i = 0; i < numCaminhoes; i++) {
+            alvos[i] = somatorioRotas / numCaminhoes;
+        }
+
+        distribuirRotas(rotas, alvos, distribuicao, 0, rotas.length - 1, 0);
+
         return distribuicao;
     }
 
-    private static void distribuirRotas(int[] rotas, int inicio, int fim, int[][] distribuicao, int N) {
-        if (inicio <= fim) {
-            int meio = (inicio + fim) / 2;
-            int caminhaoMenorKmIndex = encontrarCaminhaoMenorKm(distribuicao);
-            int indiceVazio = encontrarIndiceVazio(distribuicao[caminhaoMenorKmIndex]);
-
-            if (indiceVazio != -1) {
-                distribuicao[caminhaoMenorKmIndex][indiceVazio] = rotas[meio];
-                distribuirRotas(rotas, inicio, meio - 1, distribuicao, N);
-                distribuirRotas(rotas, meio + 1, fim, distribuicao, N);
-            }
+    private static int calcularSomatorio(int[] rotas) {
+        int somatorio = 0;
+        for (int rota : rotas) {
+            somatorio += rota;
         }
+        return somatorio;
     }
 
-    private static int encontrarCaminhaoMenorKm(int[][] distribuicao) {
-        int indexMenorKm = 0;
-        int menorKm = Integer.MAX_VALUE;
+    public static void distribuirRotas(int[] rotas, int[] alvos, int[] distribuicao, int inicio, int fim, int caminhaoAtual) {
+        if (inicio > fim) {
+            return;
+        }
 
+        int meio = (inicio + fim) / 2;
+
+        // Verifica se ultrapassa o alvo
+        if (distribuicao[caminhaoAtual] + rotas[meio] > alvos[caminhaoAtual]) {
+            // Se ultrapassa, muda para o próximo caminhão
+            caminhaoAtual = (caminhaoAtual + 1) % distribuicao.length;
+        }
+
+        // Atribui a rota ao caminhão atual
+        distribuicao[caminhaoAtual] += rotas[meio];
+
+        // Chama recursivamente a função para os subarrays à esquerda e à direita do meio
+        distribuirRotas(rotas, alvos, distribuicao, inicio, meio - 1, caminhaoAtual);
+        distribuirRotas(rotas, alvos, distribuicao, meio + 1, fim, caminhaoAtual);
+    }
+
+    public static void imprimirResultados(int[] distribuicao) {
         for (int i = 0; i < distribuicao.length; i++) {
-            int kmTotal = Arrays.stream(distribuicao[i]).sum();
-            if (kmTotal < menorKm) {
-                menorKm = kmTotal;
-                indexMenorKm = i;
-            }
+            System.out.println("Caminhao " + (i + 1) + ": " + distribuicao[i] + "km");
         }
-
-        return indexMenorKm;
     }
-
-    private static int encontrarIndiceVazio(int[] caminhao) {
-        for (int i = 0; i < caminhao.length; i++) {
-            if (caminhao[i] == 0) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
 }

@@ -5,10 +5,10 @@ import java.text.DecimalFormat;
 public class app {
     public static void main(String[] args) {
         
-       int[] Conjunto_rotas1 = {40, 36, 38, 29, 32, 28, 31, 35, 31, 30, 32, 30, 29, 39, 35, 38, 39, 35, 32, 38, 32, 33, 29, 33, 29, 39, 28};
+        int[] Conjunto_rotas1 = {40, 36, 38, 29, 32, 28, 31, 35, 31, 30, 32, 30, 29, 39, 35, 38, 39, 35, 32, 38, 32, 33, 29, 33, 29, 39, 28};
         int[] Conjunto_rotas2 = {32, 51, 32, 43, 42, 30, 42, 51, 43, 51, 29, 25, 27, 32, 29, 55, 43, 29, 32, 44, 55, 29, 53, 30, 24, 27};
        
-       EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
+        EstrategiaGulosa.testarEstrategias(EstrategiaGulosa.gerarConjunto(19));
         System.out.println("\n ------------------------------------------------------------------------------------");
         System.out.println("\nAPRESENTAÇÃO  EM SALA - GULOSO ");
         System.out.println("\nConjunto de rotas 1:");
@@ -67,12 +67,8 @@ public class app {
                 List<int[]> conjuntosDeRotas = GeradorDeProblemas.geracaoDeRotas(numRotas, tamConjunto, 0.5);
                 int[] conjuntoAtual = conjuntosDeRotas.get(i);
     
-                int[][] distribuicao = DivisaoConquista.dividirEResolver(conjuntoAtual, numCaminhoes);
-    
-                for (int j = 0; j < numCaminhoes; j++) {
-                    int totalCaminhao = Arrays.stream(distribuicao[j]).sum();
-                    System.out.printf("Caminhão %d: %d km%n", (j + 1), totalCaminhao);
-                }
+                int[] distribuicao = DivisaoConquista.divideConquista(conjuntoAtual, numCaminhoes);
+                DivisaoConquista.imprimirResultados(distribuicao);
                 System.out.println();
             }
     
