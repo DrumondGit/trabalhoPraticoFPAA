@@ -18,45 +18,58 @@ public class EstrategiaGulosa {
     public static void testarEstrategias( int[] tamanhosConjunto) {
         int numCaminhoes = 3;
         int numTestes = 10;
-
         for (int tamanhoConjunto : tamanhosConjunto) {
             double mediaTempoEG1 = 0;
             double mediaTempoEG2 = 0;
-            int []  quilometragens;
-
+            double mediaTempoEG3 = 0;
+            int[] quilometragens;
+    
             for (int teste = 0; teste < numTestes; teste++) {
-                List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(tamanhoConjunto , 10, 0.5);
-
-
+                List<int[]> conjuntoDeTeste = GeradorDeProblemas.geracaoDeRotas(tamanhoConjunto, 10, 0.5);
+    
                 System.out.println("\nEstratégia Gulosa 1:");
                 long startTimeEG1 = System.currentTimeMillis();
-                quilometragens = conjuntoDeTeste(conjuntoDeTeste,"EG1");
+                quilometragens = conjuntoDeTeste(conjuntoDeTeste, "EG1");
                 distribuirRotas(quilometragens, numCaminhoes, "EG1");
                 long endTimeEG1 = System.currentTimeMillis();
-                Long tempoEG1 = (endTimeEG1 - startTimeEG1) ;
+                Long tempoEG1 = (endTimeEG1 - startTimeEG1);
                 System.out.println("Tempo EG1: " + tempoEG1 + " ms");
-
+    
                 System.out.println("\nEstratégia Gulosa 2:");
                 long startTimeEG2 = System.currentTimeMillis();
-                quilometragens = conjuntoDeTeste(conjuntoDeTeste,"EG2");
+                quilometragens = conjuntoDeTeste(conjuntoDeTeste, "EG2");
                 distribuirRotas(quilometragens, numCaminhoes, "EG2");
                 long endTimeEG2 = System.currentTimeMillis();
                 Long tempoEG2 = (endTimeEG2 - startTimeEG2);
                 System.out.println("Tempo EG2: " + tempoEG2 + " ms");
-
-
+    
+                System.out.println("\nEstratégia Gulosa 3:");
+                long startTimeEG3 = System.currentTimeMillis();
+                quilometragens = conjuntoDeTeste(conjuntoDeTeste, "EG3");
+                distribuirRotas(quilometragens, numCaminhoes, "EG3");
+                long endTimeEG3 = System.currentTimeMillis();
+                Long tempoEG3 = (endTimeEG3 - startTimeEG3);
+                System.out.println("Tempo EG3: " + tempoEG3 + " ms");
+    
                 mediaTempoEG1 += tempoEG1;
                 mediaTempoEG2 += tempoEG2;
+                mediaTempoEG3 += tempoEG3;
             }
-
+    
             mediaTempoEG1 /= numTestes;
             mediaTempoEG2 /= numTestes;
-
+            mediaTempoEG3 /= numTestes;
+    
             System.out.println("\n" + "Tamanho do Conjunto: " + tamanhoConjunto);
             System.out.println("Média Tempo EG1: " + mediaTempoEG1 + " ms");
             System.out.println("Média Tempo EG2: " + mediaTempoEG2 + " ms");
+            System.out.println("Média Tempo EG3: " + mediaTempoEG3 + " ms");
             System.out.println();
         }
+    }
+
+    private static void ordenarPorQuilometragemDecrescente(List<int[]> conjuntoDeTeste) {
+        conjuntoDeTeste.sort(Comparator.comparingInt(a -> -a[0]));
     }
 
 
@@ -79,7 +92,11 @@ public class EstrategiaGulosa {
         } else if ("EG2".equals(estrategia)) {
             conjuntoDeTeste.sort(Comparator.comparingInt(a -> -a[0]));
             return conjuntoDeTeste.get(0);
+        } else if ("EG3".equals(estrategia)) {
+            ordenarPorQuilometragemDecrescente(conjuntoDeTeste);
+            return conjuntoDeTeste.get(0);
         }
+
         return null;
     }
 
@@ -104,6 +121,8 @@ public class EstrategiaGulosa {
             distribuirEG1(quilometragens, caminhoes);
         } else if ("EG2".equals(estrategia)) {
             distribuirEG2(quilometragens, caminhoes);
+        }else if ("EG3".equals(estrategia)) {
+            distribuirEG3(quilometragens, caminhoes);
         }
 
         imprimirDistribuicao(caminhoes);
@@ -162,6 +181,34 @@ public class EstrategiaGulosa {
             }
         }
     }
+    private static void distribuirEG3(int[] quilometragens, int[][] caminhoes) {
+        List<Integer> quilometragensList = Arrays.stream(quilometragens).boxed().collect(Collectors.toList());
+        quilometragensList.sort(Comparator.reverseOrder());
+    
+        int[] somaQuilometros = new int[caminhoes.length];
+    
+        for (int i = 0; i < quilometragensList.size(); i++) {
+            int indexCaminhao = getIndexOfMinSum(somaQuilometros);
+            int quilometragem = quilometragensList.get(i);
+            caminhoes[indexCaminhao][i] = quilometragem;
+            somaQuilometros[indexCaminhao] += quilometragem;
+        }
+    }
+    
+    private static int getIndexOfMinSum(int[] somaQuilometros) {
+        int minIndex = 0;
+        int minValue = somaQuilometros[0];
+    
+        for (int i = 1; i < somaQuilometros.length; i++) {
+            if (somaQuilometros[i] < minValue) {
+                minIndex = i;
+                minValue = somaQuilometros[i];
+            }
+        }
+    
+        return minIndex;
+    }
+
 
 
     /**
@@ -187,21 +234,22 @@ public class EstrategiaGulosa {
      */
     private static void imprimirDistribuicao(int[][] caminhoes) {
         for (int l = 0; l < caminhoes.length; l++) {
-            System.out.print("Caminhão " + (l + 1) + ": rotas ");
+            System.out.print("Caminhão " + (l + 1) + ": ");
+    
+            StringBuilder rotasFormatadas = new StringBuilder();
             int totalKm = 0;
-
+    
             for (int c = 0; c < caminhoes[l].length; c++) {
                 if (caminhoes[l][c] != 0) {
-                    //System.out.print(caminhoes[l][c]);
-                    totalKm += caminhoes[l][c];
-
-                    if (c < caminhoes[l].length - 1 && caminhoes[l][c + 1] != 0) {
-                      //  System.out.print(", ");
+                    if (rotasFormatadas.length() > 0) {
+                        //rotasFormatadas.append(", ");
                     }
+                   // rotasFormatadas.append(caminhoes[l][c]);
+                    totalKm += caminhoes[l][c];
                 }
             }
-
-            System.out.println(" - total " + totalKm + "km");
+    
+            System.out.println(rotasFormatadas.toString() + " - total " + totalKm + "km");
         }
     }
 }
